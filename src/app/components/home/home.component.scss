@@ -1,129 +1,294 @@
+// Variables
+$color-black: #000000;
+$color-white: #ffffff;
+$color-gray-light: #a0a0a0;
+$color-gray-dark: #1f2937;
+$color-highlight: #4a4a4a;
+$border-radius-oval: 50px;
+$header-height: 70px;
+
 .home-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f9fafb;
+  background-color: $color-white;
 }
 
+// Header / Navigation
 .header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background-color: $color-white;
   padding: 0 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .header-content {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 70px;
-
-  h1 {
-    font-size: 24px;
-    font-weight: 700;
-    margin: 0;
-  }
+  height: $header-height;
+  gap: 20px;
 }
 
-.user-menu {
+// Logo
+.logo {
+  background-color: $color-black;
+  border-radius: $border-radius-oval;
+  padding: 10px 24px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.user-name {
+.logo-text {
+  color: $color-white;
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+// Navigation Menu
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav-link {
+  background-color: $color-black;
+  color: $color-white;
+  padding: 10px 20px;
+  border-radius: 8px;
   font-size: 14px;
-  opacity: 0.9;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: $color-highlight;
+  }
+
+  &.active {
+    background-color: $color-gray-light;
+    color: $color-black;
+  }
+
+  &--highlight {
+    background-color: $color-highlight;
+
+    &:hover {
+      background-color: #5a5a5a;
+    }
+
+    &.active {
+      background-color: $color-gray-light;
+      color: $color-black;
+    }
+  }
 }
 
+// Logout Button
 .logout-button {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 14px;
+  background-color: $color-black;
+  color: $color-white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 16px;
   cursor: pointer;
   transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: $color-highlight;
   }
 }
 
+// Main Content
 .main-content {
   flex: 1;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+// Banner Section
+.banner-section {
+  position: relative;
   width: 100%;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
 }
 
-.welcome-section {
-  text-align: center;
-  margin-bottom: 50px;
+.banner-image {
+  width: 100%;
+  max-width: 1200px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  h2 {
-    font-size: 32px;
-    color: #1f2937;
-    margin: 0 0 16px;
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    min-height: 300px;
+    max-height: 500px;
+
+    &[src=""],
+    &:not([src]) {
+      display: none;
+    }
   }
-
-  p {
-    font-size: 18px;
-    color: #6b7280;
-    margin: 0;
-  }
 }
 
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
-}
-
-.feature-card {
-  background: white;
-  border-radius: 12px;
-  padding: 30px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s, box-shadow 0.2s;
+.banner-cta {
+  background-color: $color-black;
+  color: $color-white;
+  border: none;
+  padding: 16px 48px;
+  border-radius: $border-radius-oval;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  margin-top: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    background-color: $color-highlight;
+    transform: translateY(-2px);
   }
 }
 
-.feature-icon {
-  font-size: 40px;
-  margin-bottom: 16px;
-}
-
-.feature-card h3 {
-  font-size: 18px;
-  color: #1f2937;
-  margin: 0 0 12px;
-}
-
-.feature-card p {
-  font-size: 14px;
-  color: #6b7280;
-  margin: 0;
-  line-height: 1.6;
-}
-
+// Footer
 .footer {
-  background-color: #1f2937;
+  background-color: $color-gray-dark;
   color: #9ca3af;
   padding: 20px;
   text-align: center;
+  margin-top: auto;
 
   p {
     margin: 0;
     font-size: 14px;
+  }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .header-content {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 15px 0;
+  }
+
+  .nav-menu {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    margin-top: 15px;
+    gap: 6px;
+  }
+
+  .nav-link {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0 15px;
+  }
+
+  .logo {
+    padding: 8px 16px;
+  }
+
+  .logo-text {
+    font-size: 14px;
+  }
+
+  .nav-menu {
+    gap: 4px;
+  }
+
+  .nav-link {
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+
+  .banner-section {
+    padding: 20px 15px;
+  }
+
+  .banner-image {
+    border-radius: 12px;
+
+    img {
+      min-height: 200px;
+    }
+  }
+
+  .banner-cta {
+    padding: 14px 36px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-content {
+    gap: 10px;
+  }
+
+  .logo {
+    padding: 6px 12px;
+  }
+
+  .logo-text {
+    font-size: 12px;
+  }
+
+  .nav-menu {
+    flex-wrap: wrap;
+  }
+
+  .nav-link {
+    padding: 6px 10px;
+    font-size: 10px;
+    border-radius: 6px;
+  }
+
+  .logout-button {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  .banner-cta {
+    padding: 12px 28px;
+    font-size: 14px;
+    margin-top: 20px;
   }
 }
