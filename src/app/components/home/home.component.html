@@ -1,0 +1,52 @@
+<div class="home-container">
+  <header class="header">
+    <div class="header-content">
+      <h1>My Gym Workouts</h1>
+      <div class="user-menu">
+        @if (authService.currentUser(); as user) {
+          <span class="user-name">{{ user.name }}</span>
+        }
+        <button class="logout-button" (click)="onLogout()">
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="welcome-section">
+      <h2>¡Bienvenido a tu espacio de entrenamiento!</h2>
+      <p>Gestiona tus rutinas de entrenamiento para ganancia de masa muscular.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">💪</div>
+        <h3>Rutinas Personalizadas</h3>
+        <p>Crea y gestiona tus propias rutinas de entrenamiento adaptadas a tus objetivos.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Seguimiento de Progreso</h3>
+        <p>Monitorea tu evolución y visualiza tu progreso a lo largo del tiempo.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🏋️</div>
+        <h3>Biblioteca de Ejercicios</h3>
+        <p>Accede a una amplia colección de ejercicios para cada grupo muscular.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📅</div>
+        <h3>Planificación Semanal</h3>
+        <p>Organiza tus entrenamientos semanales de manera eficiente.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2024 My Gym Workouts. Todos los derechos reservados.</p>
+  </footer>
+</div>
