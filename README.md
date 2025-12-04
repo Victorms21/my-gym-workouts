@@ -4,10 +4,12 @@ App para creación y gestión de rutinas para ganancia de masa muscular.
 
 ## Características
 
-- 🔐 **Autenticación JWT**: Sistema de login seguro con tokens JWT
+- 🔐 **Autenticación con Laravel Sanctum**: Sistema de login y registro seguro
 - 🏠 **Página de inicio**: Dashboard principal para gestión de rutinas
 - 🛡️ **Protección de rutas**: Guards para proteger rutas autenticadas
 - 🌐 **Interceptor HTTP**: Manejo automático de tokens en las peticiones
+- 💪 **Catálogo de ejercicios**: Lista de ejercicios disponibles
+- 📋 **Gestión de rutinas**: Crear y visualizar rutinas de entrenamiento
 
 ## Tecnologías
 
@@ -20,7 +22,7 @@ App para creación y gestión de rutinas para ganancia de masa muscular.
 
 - Node.js 20.x o superior
 - npm 10.x o superior
-- Backend API con autenticación JWT (corriendo en `http://localhost:3000/api`)
+- Backend API Laravel con Sanctum (corriendo en `http://localhost:3000/api`)
 
 ## Instalación
 
@@ -72,24 +74,26 @@ src/
 │   ├── guards/           # Guards de autenticación
 │   ├── interceptors/     # Interceptores HTTP
 │   ├── models/           # Modelos e interfaces
-│   └── services/         # Servicios (AuthService)
+│   └── services/         # Servicios (AuthService, RoutineService, ExerciseService)
 ├── environments/
 │   ├── environment.ts    # Desarrollo
 │   └── environment.prod.ts # Producción
 └── styles.scss           # Estilos globales
 ```
 
-## Endpoints del Backend esperados
+## Endpoints del Backend
 
-La aplicación espera los siguientes endpoints en el backend:
+La aplicación consume los siguientes endpoints del backend Laravel:
 
 ### Autenticación
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| POST | `/api/auth/login` | Iniciar sesión |
+| POST | `/api/login` | Iniciar sesión |
+| POST | `/api/register` | Registrar usuario |
+| GET | `/api/user` | Obtener usuario actual |
 
-#### POST /api/auth/login
+#### POST /api/login
 
 **Request body:**
 ```json
@@ -107,7 +111,79 @@ La aplicación espera los siguientes endpoints en el backend:
     "email": "usuario@email.com",
     "name": "Nombre Usuario"
   },
-  "token": "jwt_token_here"
+  "token": "sanctum_token_here"
+}
+```
+
+#### POST /api/register
+
+**Request body:**
+```json
+{
+  "name": "Nombre Usuario",
+  "email": "usuario@email.com",
+  "password": "contraseña",
+  "password_confirmation": "contraseña"
+}
+```
+
+**Response:**
+```json
+{
+  "user": {
+    "id": "123",
+    "email": "usuario@email.com",
+    "name": "Nombre Usuario"
+  },
+  "token": "sanctum_token_here"
+}
+```
+
+#### GET /api/user
+
+**Response:**
+```json
+{
+  "id": "123",
+  "email": "usuario@email.com",
+  "name": "Nombre Usuario"
+}
+```
+
+### Ejercicios
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | `/api/exercises` | Obtener todos los ejercicios |
+| GET | `/api/exercises/:id` | Obtener un ejercicio específico |
+
+#### GET /api/exercises
+
+**Response:**
+```json
+[
+  {
+    "id": "1",
+    "name": "Bench Press",
+    "description": "A compound chest exercise",
+    "muscle_group": "Chest",
+    "equipment": "Barbell",
+    "instructions": "Lie on bench and press the barbell up"
+  }
+]
+```
+
+#### GET /api/exercises/:id
+
+**Response:**
+```json
+{
+  "id": "1",
+  "name": "Bench Press",
+  "description": "A compound chest exercise",
+  "muscle_group": "Chest",
+  "equipment": "Barbell",
+  "instructions": "Lie on bench and press the barbell up"
 }
 ```
 
@@ -118,8 +194,6 @@ La aplicación espera los siguientes endpoints en el backend:
 | GET | `/api/routines` | Obtener todas las rutinas del usuario |
 | GET | `/api/routines/:id` | Obtener una rutina específica |
 | POST | `/api/routines` | Crear una nueva rutina |
-| PUT | `/api/routines/:id` | Actualizar una rutina existente |
-| DELETE | `/api/routines/:id` | Eliminar una rutina |
 
 #### GET /api/routines
 
@@ -205,34 +279,6 @@ La aplicación espera los siguientes endpoints en el backend:
   "updatedAt": "2024-01-16T10:30:00Z"
 }
 ```
-
-#### PUT /api/routines/:id
-
-**Request body:**
-```json
-{
-  "name": "Updated Leg Day",
-  "description": "Updated description",
-  "exercises": [...]
-}
-```
-
-**Response:**
-```json
-{
-  "id": "456",
-  "name": "Updated Leg Day",
-  "description": "Updated description",
-  "exercises": [...],
-  "userId": "user123",
-  "createdAt": "2024-01-16T10:30:00Z",
-  "updatedAt": "2024-01-17T10:30:00Z"
-}
-```
-
-#### DELETE /api/routines/:id
-
-**Response:** `204 No Content`
 
 ## Testing
 

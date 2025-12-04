@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap, catchError, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { User, LoginRequest, AuthResponse } from '../models/user.model';
+import { User, LoginRequest, RegisterRequest, AuthResponse } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +24,7 @@ export class AuthService {
   ) {}
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials).pipe(
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
       tap(response => {
         this.setToken(response.token);
         this.setUser(response.user);
@@ -32,6 +32,33 @@ export class AuthService {
       }),
       catchError(error => {
         console.error('Login error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  register(data: RegisterRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, data).pipe(
+      tap(response => {
+        this.setToken(response.token);
+        this.setUser(response.user);
+        this.currentUserSignal.set(response.user);
+      }),
+      catchError(error => {
+        console.error('Register error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  getCurrentUser(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/user`).pipe(
+      tap(user => {
+        this.setUser(user);
+        this.currentUserSignal.set(user);
+      }),
+      catchError(error => {
+        console.error('Get user error:', error);
         return throwError(() => error);
       })
     );

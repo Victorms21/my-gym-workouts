@@ -3,7 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { AuthService } from './auth.service';
-import { LoginRequest, AuthResponse } from '../models/user.model';
+import { LoginRequest, RegisterRequest, AuthResponse } from '../models/user.model';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -56,9 +56,46 @@ describe('AuthService', () => {
       expect(service.currentUser()?.email).toBe('test@test.com');
     });
 
-    const req = httpMock.expectOne('http://localhost:3000/api/auth/login');
+    const req = httpMock.expectOne('http://localhost:3000/api/login');
     expect(req.request.method).toBe('POST');
     req.flush(mockResponse);
+  });
+
+  it('should register successfully', () => {
+    const registerData: RegisterRequest = {
+      name: 'New User',
+      email: 'newuser@test.com',
+      password: 'password123',
+      password_confirmation: 'password123'
+    };
+    const mockResponse: AuthResponse = {
+      user: { id: '2', email: 'newuser@test.com', name: 'New User' },
+      token: 'new-jwt-token'
+    };
+
+    service.register(registerData).subscribe(response => {
+      expect(response).toEqual(mockResponse);
+      expect(service.getToken()).toBe('new-jwt-token');
+      expect(service.isAuthenticated()).toBeTrue();
+      expect(service.currentUser()?.name).toBe('New User');
+    });
+
+    const req = httpMock.expectOne('http://localhost:3000/api/register');
+    expect(req.request.method).toBe('POST');
+    req.flush(mockResponse);
+  });
+
+  it('should get current user', () => {
+    const mockUser = { id: '1', email: 'test@test.com', name: 'Test User' };
+
+    service.getCurrentUser().subscribe(user => {
+      expect(user).toEqual(mockUser);
+      expect(service.currentUser()?.email).toBe('test@test.com');
+    });
+
+    const req = httpMock.expectOne('http://localhost:3000/api/user');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockUser);
   });
 
   it('should logout and clear data', () => {
