@@ -2,7 +2,7 @@ import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap, catchError, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Routine, CreateRoutineRequest } from '../models/routine.model';
+import { Routine, CreateRoutineRequest, UpdateRoutineRequest } from '../models/routine.model';
 
 @Injectable({
   providedIn: 'root',
@@ -75,6 +75,48 @@ export class RoutineService {
       catchError((error) => {
         this.loadingSignal.set(false);
         this.errorSignal.set(error.message || 'Error creating routine');
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
+   * Updates an existing routine
+   */
+  updateRoutine(id: string, routine: UpdateRoutineRequest): Observable<Routine> {
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+
+    return this.http.put<Routine>(`${this.apiUrl}/${id}`, routine).pipe(
+      tap((updatedRoutine) => {
+        this.routinesSignal.update((routines) =>
+          routines.map((r) => (r.id === id ? updatedRoutine : r))
+        );
+        this.loadingSignal.set(false);
+      }),
+      catchError((error) => {
+        this.loadingSignal.set(false);
+        this.errorSignal.set(error.message || 'Error updating routine');
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
+   * Deletes a routine
+   */
+  deleteRoutine(id: string): Observable<void> {
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+      tap(() => {
+        this.routinesSignal.update((routines) => routines.filter((r) => r.id !== id));
+        this.loadingSignal.set(false);
+      }),
+      catchError((error) => {
+        this.loadingSignal.set(false);
+        this.errorSignal.set(error.message || 'Error deleting routine');
         return throwError(() => error);
       })
     );

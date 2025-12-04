@@ -194,6 +194,8 @@ La aplicación consume los siguientes endpoints del backend Laravel:
 | GET | `/api/routines` | Obtener todas las rutinas del usuario |
 | GET | `/api/routines/:id` | Obtener una rutina específica |
 | POST | `/api/routines` | Crear una nueva rutina |
+| PUT | `/api/routines/:id` | Actualizar una rutina existente |
+| DELETE | `/api/routines/:id` | Eliminar una rutina |
 
 #### GET /api/routines
 
@@ -279,6 +281,34 @@ La aplicación consume los siguientes endpoints del backend Laravel:
   "updatedAt": "2024-01-16T10:30:00Z"
 }
 ```
+
+#### PUT /api/routines/:id
+
+**Request body:**
+```json
+{
+  "name": "Updated Leg Day",
+  "description": "Updated description",
+  "exercises": [...]
+}
+```
+
+**Response:**
+```json
+{
+  "id": "456",
+  "name": "Updated Leg Day",
+  "description": "Updated description",
+  "exercises": [...],
+  "userId": "user123",
+  "createdAt": "2024-01-16T10:30:00Z",
+  "updatedAt": "2024-01-17T10:30:00Z"
+}
+```
+
+#### DELETE /api/routines/:id
+
+**Response:** `204 No Content`
 
 ## Testing
 
