@@ -111,6 +111,129 @@ La aplicación espera los siguientes endpoints en el backend:
 }
 ```
 
+### Rutinas
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | `/api/routines` | Obtener todas las rutinas del usuario |
+| GET | `/api/routines/:id` | Obtener una rutina específica |
+| POST | `/api/routines` | Crear una nueva rutina |
+| PUT | `/api/routines/:id` | Actualizar una rutina existente |
+| DELETE | `/api/routines/:id` | Eliminar una rutina |
+
+#### GET /api/routines
+
+**Response:**
+```json
+[
+  {
+    "id": "123",
+    "name": "Push Day",
+    "description": "Chest and Triceps workout",
+    "exercises": [
+      {
+        "id": "e1",
+        "name": "Bench Press",
+        "sets": [
+          { "reps": 10, "weight": 60, "restSeconds": 90 },
+          { "reps": 8, "weight": 70, "restSeconds": 90 }
+        ],
+        "notes": "Focus on form"
+      }
+    ],
+    "userId": "user123",
+    "createdAt": "2024-01-15T10:30:00Z",
+    "updatedAt": "2024-01-15T10:30:00Z"
+  }
+]
+```
+
+#### GET /api/routines/:id
+
+**Response:**
+```json
+{
+  "id": "123",
+  "name": "Push Day",
+  "description": "Chest and Triceps workout",
+  "exercises": [...],
+  "userId": "user123",
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-01-15T10:30:00Z"
+}
+```
+
+#### POST /api/routines
+
+**Request body:**
+```json
+{
+  "name": "Leg Day",
+  "description": "Legs workout",
+  "exercises": [
+    {
+      "name": "Squats",
+      "sets": [
+        { "reps": 12, "weight": 100 },
+        { "reps": 10, "weight": 120 }
+      ],
+      "notes": "Deep squats"
+    }
+  ]
+}
+```
+
+**Response:**
+```json
+{
+  "id": "456",
+  "name": "Leg Day",
+  "description": "Legs workout",
+  "exercises": [
+    {
+      "id": "e2",
+      "name": "Squats",
+      "sets": [
+        { "reps": 12, "weight": 100 },
+        { "reps": 10, "weight": 120 }
+      ],
+      "notes": "Deep squats"
+    }
+  ],
+  "userId": "user123",
+  "createdAt": "2024-01-16T10:30:00Z",
+  "updatedAt": "2024-01-16T10:30:00Z"
+}
+```
+
+#### PUT /api/routines/:id
+
+**Request body:**
+```json
+{
+  "name": "Updated Leg Day",
+  "description": "Updated description",
+  "exercises": [...]
+}
+```
+
+**Response:**
+```json
+{
+  "id": "456",
+  "name": "Updated Leg Day",
+  "description": "Updated description",
+  "exercises": [...],
+  "userId": "user123",
+  "createdAt": "2024-01-16T10:30:00Z",
+  "updatedAt": "2024-01-17T10:30:00Z"
+}
+```
+
+#### DELETE /api/routines/:id
+
+**Response:** `204 No Content`
+
 ## Testing
 
 ```bash
