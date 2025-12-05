@@ -9,35 +9,52 @@ describe('RoutineService', () => {
   let httpMock: HttpTestingController;
 
   const mockRoutine: Routine = {
-    id: '1',
-    name: 'Push Day',
-    description: 'Chest and Triceps workout',
+    id: 1,
+    name: 'Full Body Beginner',
+    created_at: '2025-12-04T19:57:00.000000Z',
+    updated_at: '2025-12-04T19:57:00.000000Z',
     exercises: [
       {
-        id: 'e1',
-        name: 'Bench Press',
-        sets: [
-          { reps: 10, weight: 60, restSeconds: 90 },
-          { reps: 8, weight: 70, restSeconds: 90 },
-        ],
-        notes: 'Focus on form',
+        id: 1,
+        name: 'Sentadilla',
+        muscle_group_id: 3,
+        created_at: '2025-12-04T19:57:00.000000Z',
+        updated_at: '2025-12-04T19:57:00.000000Z',
+        pivot: {
+          routine_id: 1,
+          exercise_id: 1,
+          sets: 3,
+          reps: 10,
+          created_at: '2025-12-04T19:57:00.000000Z',
+          updated_at: '2025-12-04T19:57:00.000000Z',
+        },
+      },
+      {
+        id: 2,
+        name: 'Press de banca',
+        muscle_group_id: 1,
+        created_at: '2025-12-04T19:57:00.000000Z',
+        updated_at: '2025-12-04T19:57:00.000000Z',
+        pivot: {
+          routine_id: 1,
+          exercise_id: 2,
+          sets: 3,
+          reps: 8,
+          created_at: '2025-12-04T19:57:00.000000Z',
+          updated_at: '2025-12-04T19:57:00.000000Z',
+        },
       },
     ],
-    userId: 'user1',
-    createdAt: '2024-01-15T10:30:00Z',
-    updatedAt: '2024-01-15T10:30:00Z',
   };
 
   const mockRoutines: Routine[] = [
     mockRoutine,
     {
-      id: '2',
-      name: 'Pull Day',
-      description: 'Back and Biceps workout',
+      id: 2,
+      name: 'Push Day',
+      created_at: '2025-12-04T20:00:00.000000Z',
+      updated_at: '2025-12-04T20:00:00.000000Z',
       exercises: [],
-      userId: 'user1',
-      createdAt: '2024-01-16T10:30:00Z',
-      updatedAt: '2024-01-16T10:30:00Z',
     },
   ];
 
@@ -86,7 +103,7 @@ describe('RoutineService', () => {
 
   describe('getRoutine', () => {
     it('should fetch a single routine by ID', () => {
-      service.getRoutine('1').subscribe((routine) => {
+      service.getRoutine(1).subscribe((routine) => {
         expect(routine).toEqual(mockRoutine);
       });
 
@@ -96,7 +113,7 @@ describe('RoutineService', () => {
     });
 
     it('should handle error when routine not found', () => {
-      service.getRoutine('999').subscribe({
+      service.getRoutine(999).subscribe({
         error: (error) => {
           expect(error.status).toBe(404);
         },
@@ -111,28 +128,37 @@ describe('RoutineService', () => {
     it('should create a new routine', () => {
       const newRoutine: CreateRoutineRequest = {
         name: 'Leg Day',
-        description: 'Legs workout',
         exercises: [
           {
-            name: 'Squats',
-            sets: [{ reps: 12, weight: 100 }],
+            exercise_id: 1,
+            sets: 4,
+            reps: 12,
           },
         ],
       };
 
       const createdRoutine: Routine = {
-        ...newRoutine,
-        id: '3',
+        id: 3,
+        name: 'Leg Day',
+        created_at: '2025-12-05T10:30:00.000000Z',
+        updated_at: '2025-12-05T10:30:00.000000Z',
         exercises: [
           {
-            id: 'e3',
-            name: 'Squats',
-            sets: [{ reps: 12, weight: 100 }],
+            id: 1,
+            name: 'Sentadilla',
+            muscle_group_id: 3,
+            created_at: '2025-12-04T19:57:00.000000Z',
+            updated_at: '2025-12-04T19:57:00.000000Z',
+            pivot: {
+              routine_id: 3,
+              exercise_id: 1,
+              sets: 4,
+              reps: 12,
+              created_at: '2025-12-05T10:30:00.000000Z',
+              updated_at: '2025-12-05T10:30:00.000000Z',
+            },
           },
         ],
-        userId: 'user1',
-        createdAt: '2024-01-17T10:30:00Z',
-        updatedAt: '2024-01-17T10:30:00Z',
       };
 
       service.createRoutine(newRoutine).subscribe((routine) => {
@@ -188,23 +214,18 @@ describe('RoutineService', () => {
       getReq.flush(mockRoutines);
 
       const updateData: UpdateRoutineRequest = {
-        name: 'Updated Push Day',
-        description: 'Updated description',
+        name: 'Updated Full Body',
       };
 
       const updatedRoutine: Routine = {
-        id: mockRoutine.id,
-        name: updateData.name!,
-        description: updateData.description,
-        exercises: mockRoutine.exercises,
-        userId: mockRoutine.userId,
-        createdAt: mockRoutine.createdAt,
-        updatedAt: '2024-01-18T10:30:00Z',
+        ...mockRoutine,
+        name: 'Updated Full Body',
+        updated_at: '2025-12-05T11:00:00.000000Z',
       };
 
-      service.updateRoutine('1', updateData).subscribe((routine) => {
+      service.updateRoutine(1, updateData).subscribe((routine) => {
         expect(routine).toEqual(updatedRoutine);
-        expect(service.routines().find((r) => r.id === '1')?.name).toBe('Updated Push Day');
+        expect(service.routines().find((r) => r.id === 1)?.name).toBe('Updated Full Body');
       });
 
       const req = httpMock.expectOne('http://localhost:3000/api/routines/1');
@@ -223,9 +244,9 @@ describe('RoutineService', () => {
 
       expect(service.routines().length).toBe(2);
 
-      service.deleteRoutine('1').subscribe(() => {
+      service.deleteRoutine(1).subscribe(() => {
         expect(service.routines().length).toBe(1);
-        expect(service.routines().find((r) => r.id === '1')).toBeUndefined();
+        expect(service.routines().find((r) => r.id === 1)).toBeUndefined();
       });
 
       const req = httpMock.expectOne('http://localhost:3000/api/routines/1');

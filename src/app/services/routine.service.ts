@@ -44,7 +44,7 @@ export class RoutineService {
   /**
    * Fetches a single routine by ID
    */
-  getRoutine(id: string): Observable<Routine> {
+  getRoutine(id: number): Observable<Routine> {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
 
@@ -83,7 +83,7 @@ export class RoutineService {
   /**
    * Updates an existing routine
    */
-  updateRoutine(id: string, routine: UpdateRoutineRequest): Observable<Routine> {
+  updateRoutine(id: number, routine: UpdateRoutineRequest): Observable<Routine> {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
 
@@ -105,7 +105,7 @@ export class RoutineService {
   /**
    * Deletes a routine
    */
-  deleteRoutine(id: string): Observable<void> {
+  deleteRoutine(id: number): Observable<void> {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
 

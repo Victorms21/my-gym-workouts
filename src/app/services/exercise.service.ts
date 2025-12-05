@@ -44,7 +44,7 @@ export class ExerciseService {
   /**
    * Fetches a single exercise by ID
    */
-  getExercise(id: string): Observable<Exercise> {
+  getExercise(id: number): Observable<Exercise> {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
 

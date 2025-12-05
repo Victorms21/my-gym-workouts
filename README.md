@@ -187,12 +187,18 @@ Authorization: Bearer <token>
 ```json
 [
   {
-    "id": "1",
-    "name": "Bench Press",
-    "description": "A compound chest exercise",
-    "muscle_group": "Chest",
-    "equipment": "Barbell",
-    "instructions": "Lie on bench and press the barbell up"
+    "id": 1,
+    "name": "Sentadilla",
+    "muscle_group_id": 3,
+    "created_at": "2025-12-04T19:57:00.000000Z",
+    "updated_at": "2025-12-04T19:57:00.000000Z"
+  },
+  {
+    "id": 2,
+    "name": "Press de banca",
+    "muscle_group_id": 1,
+    "created_at": "2025-12-04T19:57:00.000000Z",
+    "updated_at": "2025-12-04T19:57:00.000000Z"
   }
 ]
 ```
@@ -202,12 +208,11 @@ Authorization: Bearer <token>
 **Response:**
 ```json
 {
-  "id": "1",
-  "name": "Bench Press",
-  "description": "A compound chest exercise",
-  "muscle_group": "Chest",
-  "equipment": "Barbell",
-  "instructions": "Lie on bench and press the barbell up"
+  "id": 1,
+  "name": "Sentadilla",
+  "muscle_group_id": 3,
+  "created_at": "2025-12-04T19:57:00.000000Z",
+  "updated_at": "2025-12-04T19:57:00.000000Z"
 }
 ```
 
@@ -234,23 +239,42 @@ Authorization: Bearer <token>
 ```json
 [
   {
-    "id": "123",
-    "name": "Push Day",
-    "description": "Chest and Triceps workout",
+    "id": 1,
+    "name": "Full Body Beginner",
+    "created_at": "2025-12-04T19:57:00.000000Z",
+    "updated_at": "2025-12-04T19:57:00.000000Z",
     "exercises": [
       {
-        "id": "e1",
-        "name": "Bench Press",
-        "sets": [
-          { "reps": 10, "weight": 60, "restSeconds": 90 },
-          { "reps": 8, "weight": 70, "restSeconds": 90 }
-        ],
-        "notes": "Focus on form"
+        "id": 1,
+        "name": "Sentadilla",
+        "muscle_group_id": 3,
+        "created_at": "2025-12-04T19:57:00.000000Z",
+        "updated_at": "2025-12-04T19:57:00.000000Z",
+        "pivot": {
+          "routine_id": 1,
+          "exercise_id": 1,
+          "sets": 3,
+          "reps": 10,
+          "created_at": "2025-12-04T19:57:00.000000Z",
+          "updated_at": "2025-12-04T19:57:00.000000Z"
+        }
+      },
+      {
+        "id": 2,
+        "name": "Press de banca",
+        "muscle_group_id": 1,
+        "created_at": "2025-12-04T19:57:00.000000Z",
+        "updated_at": "2025-12-04T19:57:00.000000Z",
+        "pivot": {
+          "routine_id": 1,
+          "exercise_id": 2,
+          "sets": 3,
+          "reps": 8,
+          "created_at": "2025-12-04T19:57:00.000000Z",
+          "updated_at": "2025-12-04T19:57:00.000000Z"
+        }
       }
-    ],
-    "userId": "user123",
-    "createdAt": "2024-01-15T10:30:00Z",
-    "updatedAt": "2024-01-15T10:30:00Z"
+    ]
   }
 ]
 ```
@@ -260,13 +284,27 @@ Authorization: Bearer <token>
 **Response:**
 ```json
 {
-  "id": "123",
-  "name": "Push Day",
-  "description": "Chest and Triceps workout",
-  "exercises": [...],
-  "userId": "user123",
-  "createdAt": "2024-01-15T10:30:00Z",
-  "updatedAt": "2024-01-15T10:30:00Z"
+  "id": 1,
+  "name": "Full Body Beginner",
+  "created_at": "2025-12-04T19:57:00.000000Z",
+  "updated_at": "2025-12-04T19:57:00.000000Z",
+  "exercises": [
+    {
+      "id": 1,
+      "name": "Sentadilla",
+      "muscle_group_id": 3,
+      "created_at": "2025-12-04T19:57:00.000000Z",
+      "updated_at": "2025-12-04T19:57:00.000000Z",
+      "pivot": {
+        "routine_id": 1,
+        "exercise_id": 1,
+        "sets": 3,
+        "reps": 10,
+        "created_at": "2025-12-04T19:57:00.000000Z",
+        "updated_at": "2025-12-04T19:57:00.000000Z"
+      }
+    }
+  ]
 }
 ```
 
@@ -276,15 +314,11 @@ Authorization: Bearer <token>
 ```json
 {
   "name": "Leg Day",
-  "description": "Legs workout",
   "exercises": [
     {
-      "name": "Squats",
-      "sets": [
-        { "reps": 12, "weight": 100 },
-        { "reps": 10, "weight": 120 }
-      ],
-      "notes": "Deep squats"
+      "exercise_id": 1,
+      "sets": 4,
+      "reps": 12
     }
   ]
 }
@@ -293,23 +327,27 @@ Authorization: Bearer <token>
 **Response:**
 ```json
 {
-  "id": "456",
+  "id": 2,
   "name": "Leg Day",
-  "description": "Legs workout",
+  "created_at": "2025-12-05T10:30:00.000000Z",
+  "updated_at": "2025-12-05T10:30:00.000000Z",
   "exercises": [
     {
-      "id": "e2",
-      "name": "Squats",
-      "sets": [
-        { "reps": 12, "weight": 100 },
-        { "reps": 10, "weight": 120 }
-      ],
-      "notes": "Deep squats"
+      "id": 1,
+      "name": "Sentadilla",
+      "muscle_group_id": 3,
+      "created_at": "2025-12-04T19:57:00.000000Z",
+      "updated_at": "2025-12-04T19:57:00.000000Z",
+      "pivot": {
+        "routine_id": 2,
+        "exercise_id": 1,
+        "sets": 4,
+        "reps": 12,
+        "created_at": "2025-12-05T10:30:00.000000Z",
+        "updated_at": "2025-12-05T10:30:00.000000Z"
+      }
     }
-  ],
-  "userId": "user123",
-  "createdAt": "2024-01-16T10:30:00Z",
-  "updatedAt": "2024-01-16T10:30:00Z"
+  ]
 }
 ```
 
@@ -319,21 +357,40 @@ Authorization: Bearer <token>
 ```json
 {
   "name": "Updated Leg Day",
-  "description": "Updated description",
-  "exercises": [...]
+  "exercises": [
+    {
+      "exercise_id": 1,
+      "sets": 5,
+      "reps": 10
+    }
+  ]
 }
 ```
 
 **Response:**
 ```json
 {
-  "id": "456",
+  "id": 2,
   "name": "Updated Leg Day",
-  "description": "Updated description",
-  "exercises": [...],
-  "userId": "user123",
-  "createdAt": "2024-01-16T10:30:00Z",
-  "updatedAt": "2024-01-17T10:30:00Z"
+  "created_at": "2025-12-05T10:30:00.000000Z",
+  "updated_at": "2025-12-05T11:00:00.000000Z",
+  "exercises": [
+    {
+      "id": 1,
+      "name": "Sentadilla",
+      "muscle_group_id": 3,
+      "created_at": "2025-12-04T19:57:00.000000Z",
+      "updated_at": "2025-12-04T19:57:00.000000Z",
+      "pivot": {
+        "routine_id": 2,
+        "exercise_id": 1,
+        "sets": 5,
+        "reps": 10,
+        "created_at": "2025-12-05T10:30:00.000000Z",
+        "updated_at": "2025-12-05T11:00:00.000000Z"
+      }
+    }
+  ]
 }
 ```
 

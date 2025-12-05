@@ -9,22 +9,21 @@ describe('ExerciseService', () => {
   let httpMock: HttpTestingController;
 
   const mockExercise: Exercise = {
-    id: '1',
-    name: 'Bench Press',
-    description: 'A compound chest exercise',
-    muscle_group: 'Chest',
-    equipment: 'Barbell',
-    instructions: 'Lie on bench and press the barbell up',
+    id: 1,
+    name: 'Sentadilla',
+    muscle_group_id: 3,
+    created_at: '2025-12-04T19:57:00.000000Z',
+    updated_at: '2025-12-04T19:57:00.000000Z',
   };
 
   const mockExercises: Exercise[] = [
     mockExercise,
     {
-      id: '2',
-      name: 'Squats',
-      description: 'A compound leg exercise',
-      muscle_group: 'Legs',
-      equipment: 'Barbell',
+      id: 2,
+      name: 'Press de banca',
+      muscle_group_id: 1,
+      created_at: '2025-12-04T19:57:00.000000Z',
+      updated_at: '2025-12-04T19:57:00.000000Z',
     },
   ];
 
@@ -73,7 +72,7 @@ describe('ExerciseService', () => {
 
   describe('getExercise', () => {
     it('should fetch a single exercise by ID', () => {
-      service.getExercise('1').subscribe((exercise) => {
+      service.getExercise(1).subscribe((exercise) => {
         expect(exercise).toEqual(mockExercise);
       });
 
@@ -83,7 +82,7 @@ describe('ExerciseService', () => {
     });
 
     it('should handle error when exercise not found', () => {
-      service.getExercise('999').subscribe({
+      service.getExercise(999).subscribe({
         error: (error) => {
           expect(error.status).toBe(404);
         },
