@@ -10,7 +10,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  readonly authService = inject(AuthService);
+  public readonly authService = inject(AuthService);
   activeNavItem = signal<string>('routines');
 
   setActiveNavItem(item: string): void {
