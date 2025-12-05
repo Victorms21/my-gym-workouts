@@ -65,8 +65,7 @@ describe('AuthService', () => {
     const registerData: RegisterRequest = {
       name: 'New User',
       email: 'newuser@test.com',
-      password: 'password123',
-      password_confirmation: 'password123'
+      password: 'password123'
     };
     const mockResponse: AuthResponse = {
       user: { id: '2', email: 'newuser@test.com', name: 'New User' },

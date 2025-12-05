@@ -2,13 +2,9 @@
  * Represents an exercise from the exercises catalog
  */
 export interface Exercise {
-  id: string;
+  id: number;
   name: string;
-  description?: string;
-  muscle_group?: string;
-  equipment?: string;
-  instructions?: string;
-  image_url?: string;
-  created_at?: string;
-  updated_at?: string;
+  muscle_group_id: number;
+  created_at: string;
+  updated_at: string;
 }

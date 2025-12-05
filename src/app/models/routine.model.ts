@@ -1,46 +1,47 @@
 /**
- * Represents a single set within an exercise
+ * Represents the pivot data for an exercise in a routine
+ * Contains the relationship data between routine and exercise
  */
-export interface ExerciseSet {
+export interface ExercisePivot {
+  routine_id: number;
+  exercise_id: number;
+  sets: number;
   reps: number;
-  weight?: number;
-  restSeconds?: number;
+  created_at: string;
+  updated_at: string;
 }
 
 /**
  * Represents an exercise within a routine
  */
 export interface RoutineExercise {
-  id: string;
+  id: number;
   name: string;
-  sets: ExerciseSet[];
-  notes?: string;
+  muscle_group_id: number;
+  created_at: string;
+  updated_at: string;
+  pivot: ExercisePivot;
 }
 
 /**
  * Represents a workout routine
- * This interface is used for type safety in the frontend,
- * even though routines are stored as JSON in the database
  */
 export interface Routine {
-  id: string;
+  id: number;
   name: string;
-  description?: string;
+  created_at: string;
+  updated_at: string;
   exercises: RoutineExercise[];
-  userId: string;
-  /** ISO 8601 date string (e.g., "2024-01-15T10:30:00Z") */
-  createdAt: string;
-  /** ISO 8601 date string (e.g., "2024-01-15T10:30:00Z") */
-  updatedAt: string;
 }
 
 /**
- * Exercise data for creating or updating routines (without ID)
+ * Exercise input for creating or updating routines
+ * sets and reps are optional - defaults to 4 sets and 8 reps if not provided
  */
 export interface RoutineExerciseInput {
-  name: string;
-  sets: ExerciseSet[];
-  notes?: string;
+  exercise_id: number;
+  sets?: number;
+  reps?: number;
 }
 
 /**
@@ -48,7 +49,6 @@ export interface RoutineExerciseInput {
  */
 export interface CreateRoutineRequest {
   name: string;
-  description?: string;
   exercises: RoutineExerciseInput[];
 }
 
@@ -57,6 +57,5 @@ export interface CreateRoutineRequest {
  */
 export interface UpdateRoutineRequest {
   name?: string;
-  description?: string;
   exercises?: RoutineExerciseInput[];
 }

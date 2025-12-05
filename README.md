@@ -74,7 +74,7 @@ src/
 │   ├── guards/           # Guards de autenticación
 │   ├── interceptors/     # Interceptores HTTP
 │   ├── models/           # Modelos e interfaces
-│   └── services/         # Servicios (AuthService, RoutineService, ExerciseService)
+│   └── services/         # Servicios (AuthService, RoutineService, ExerciseService, MuscleGroupService)
 ├── environments/
 │   ├── environment.ts    # Desarrollo
 │   └── environment.prod.ts # Producción
@@ -87,13 +87,22 @@ La aplicación consume los siguientes endpoints del backend Laravel:
 
 ### Autenticación
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| POST | `/api/login` | Iniciar sesión |
-| POST | `/api/register` | Registrar usuario |
-| GET | `/api/user` | Obtener usuario actual |
+El sistema utiliza autenticación basada en Bearer Token. Los endpoints `/api/login` y `/api/register` devuelven un token que debe incluirse en la cabecera `Authorization` de todas las peticiones a endpoints protegidos.
+
+**Cabecera de autorización:**
+```
+Authorization: Bearer <token>
+```
+
+| Método | Endpoint | Descripción | Autenticación |
+|--------|----------|-------------|---------------|
+| POST | `/api/login` | Iniciar sesión | No requerida |
+| POST | `/api/register` | Registrar usuario | No requerida |
+| GET | `/api/user` | Obtener usuario actual | Bearer Token |
 
 #### POST /api/login
+
+Inicia sesión y devuelve un Bearer token para autenticación.
 
 **Request body:**
 ```json
@@ -111,19 +120,20 @@ La aplicación consume los siguientes endpoints del backend Laravel:
     "email": "usuario@email.com",
     "name": "Nombre Usuario"
   },
-  "token": "sanctum_token_here"
+  "token": "bearer_token_here"
 }
 ```
 
 #### POST /api/register
+
+Registra un nuevo usuario y devuelve un Bearer token para autenticación.
 
 **Request body:**
 ```json
 {
   "name": "Nombre Usuario",
   "email": "usuario@email.com",
-  "password": "contraseña",
-  "password_confirmation": "contraseña"
+  "password": "contraseña"
 }
 ```
 
@@ -135,11 +145,18 @@ La aplicación consume los siguientes endpoints del backend Laravel:
     "email": "usuario@email.com",
     "name": "Nombre Usuario"
   },
-  "token": "sanctum_token_here"
+  "token": "bearer_token_here"
 }
 ```
 
 #### GET /api/user
+
+Obtiene la información del usuario autenticado. Requiere Bearer token en la cabecera.
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
 **Response:**
 ```json
@@ -152,23 +169,36 @@ La aplicación consume los siguientes endpoints del backend Laravel:
 
 ### Ejercicios
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | `/api/exercises` | Obtener todos los ejercicios |
-| GET | `/api/exercises/:id` | Obtener un ejercicio específico |
+Todos los endpoints de ejercicios requieren autenticación con Bearer token.
+
+| Método | Endpoint | Descripción | Autenticación |
+|--------|----------|-------------|---------------|
+| GET | `/api/exercises` | Obtener todos los ejercicios | Bearer Token |
+| GET | `/api/exercises/:id` | Obtener un ejercicio específico | Bearer Token |
 
 #### GET /api/exercises
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
 **Response:**
 ```json
 [
   {
-    "id": "1",
-    "name": "Bench Press",
-    "description": "A compound chest exercise",
-    "muscle_group": "Chest",
-    "equipment": "Barbell",
-    "instructions": "Lie on bench and press the barbell up"
+    "id": 1,
+    "name": "Sentadilla",
+    "muscle_group_id": 3,
+    "created_at": "2025-12-04T19:57:00.000000Z",
+    "updated_at": "2025-12-04T19:57:00.000000Z"
+  },
+  {
+    "id": 2,
+    "name": "Press de banca",
+    "muscle_group_id": 1,
+    "created_at": "2025-12-04T19:57:00.000000Z",
+    "updated_at": "2025-12-04T19:57:00.000000Z"
   }
 ]
 ```
@@ -178,48 +208,125 @@ La aplicación consume los siguientes endpoints del backend Laravel:
 **Response:**
 ```json
 {
-  "id": "1",
-  "name": "Bench Press",
-  "description": "A compound chest exercise",
-  "muscle_group": "Chest",
-  "equipment": "Barbell",
-  "instructions": "Lie on bench and press the barbell up"
+  "id": 1,
+  "name": "Sentadilla",
+  "muscle_group_id": 3,
+  "created_at": "2025-12-04T19:57:00.000000Z",
+  "updated_at": "2025-12-04T19:57:00.000000Z"
 }
 ```
 
-### Rutinas
+### Grupos Musculares
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | `/api/routines` | Obtener todas las rutinas del usuario |
-| GET | `/api/routines/:id` | Obtener una rutina específica |
-| POST | `/api/routines` | Crear una nueva rutina |
-| PUT | `/api/routines/:id` | Actualizar una rutina existente |
-| DELETE | `/api/routines/:id` | Eliminar una rutina |
+Todos los endpoints de grupos musculares requieren autenticación con Bearer token.
 
-#### GET /api/routines
+| Método | Endpoint | Descripción | Autenticación |
+|--------|----------|-------------|---------------|
+| GET | `/api/muscleGroups` | Obtener todos los grupos musculares | Bearer Token |
+| GET | `/api/muscleGroups/:id` | Obtener un grupo muscular específico | Bearer Token |
+
+#### GET /api/muscleGroups
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
 **Response:**
 ```json
 [
   {
-    "id": "123",
-    "name": "Push Day",
-    "description": "Chest and Triceps workout",
+    "id": 1,
+    "name": "Pecho",
+    "created_at": "2025-12-04T19:57:00.000000Z",
+    "updated_at": "2025-12-04T19:57:00.000000Z"
+  },
+  {
+    "id": 2,
+    "name": "Espalda",
+    "created_at": "2025-12-04T19:57:00.000000Z",
+    "updated_at": "2025-12-04T19:57:00.000000Z"
+  },
+  {
+    "id": 3,
+    "name": "Piernas",
+    "created_at": "2025-12-04T19:57:00.000000Z",
+    "updated_at": "2025-12-04T19:57:00.000000Z"
+  }
+]
+```
+
+#### GET /api/muscleGroups/:id
+
+**Response:**
+```json
+{
+  "id": 1,
+  "name": "Pecho",
+  "created_at": "2025-12-04T19:57:00.000000Z",
+  "updated_at": "2025-12-04T19:57:00.000000Z"
+}
+```
+
+### Rutinas
+
+Todos los endpoints de rutinas requieren autenticación con Bearer token.
+
+| Método | Endpoint | Descripción | Autenticación |
+|--------|----------|-------------|---------------|
+| GET | `/api/routines` | Obtener todas las rutinas del usuario | Bearer Token |
+| GET | `/api/routines/:id` | Obtener una rutina específica | Bearer Token |
+| POST | `/api/routines` | Crear una nueva rutina | Bearer Token |
+| PUT | `/api/routines/:id` | Actualizar una rutina existente | Bearer Token |
+| DELETE | `/api/routines/:id` | Eliminar una rutina | Bearer Token |
+
+#### GET /api/routines
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+**Response:**
+```json
+[
+  {
+    "id": 1,
+    "name": "Full Body Beginner",
+    "created_at": "2025-12-04T19:57:00.000000Z",
+    "updated_at": "2025-12-04T19:57:00.000000Z",
     "exercises": [
       {
-        "id": "e1",
-        "name": "Bench Press",
-        "sets": [
-          { "reps": 10, "weight": 60, "restSeconds": 90 },
-          { "reps": 8, "weight": 70, "restSeconds": 90 }
-        ],
-        "notes": "Focus on form"
+        "id": 1,
+        "name": "Sentadilla",
+        "muscle_group_id": 3,
+        "created_at": "2025-12-04T19:57:00.000000Z",
+        "updated_at": "2025-12-04T19:57:00.000000Z",
+        "pivot": {
+          "routine_id": 1,
+          "exercise_id": 1,
+          "sets": 3,
+          "reps": 10,
+          "created_at": "2025-12-04T19:57:00.000000Z",
+          "updated_at": "2025-12-04T19:57:00.000000Z"
+        }
+      },
+      {
+        "id": 2,
+        "name": "Press de banca",
+        "muscle_group_id": 1,
+        "created_at": "2025-12-04T19:57:00.000000Z",
+        "updated_at": "2025-12-04T19:57:00.000000Z",
+        "pivot": {
+          "routine_id": 1,
+          "exercise_id": 2,
+          "sets": 3,
+          "reps": 8,
+          "created_at": "2025-12-04T19:57:00.000000Z",
+          "updated_at": "2025-12-04T19:57:00.000000Z"
+        }
       }
-    ],
-    "userId": "user123",
-    "createdAt": "2024-01-15T10:30:00Z",
-    "updatedAt": "2024-01-15T10:30:00Z"
+    ]
   }
 ]
 ```
@@ -229,84 +336,127 @@ La aplicación consume los siguientes endpoints del backend Laravel:
 **Response:**
 ```json
 {
-  "id": "123",
-  "name": "Push Day",
-  "description": "Chest and Triceps workout",
-  "exercises": [...],
-  "userId": "user123",
-  "createdAt": "2024-01-15T10:30:00Z",
-  "updatedAt": "2024-01-15T10:30:00Z"
-}
-```
-
-#### POST /api/routines
-
-**Request body:**
-```json
-{
-  "name": "Leg Day",
-  "description": "Legs workout",
+  "id": 1,
+  "name": "Full Body Beginner",
+  "created_at": "2025-12-04T19:57:00.000000Z",
+  "updated_at": "2025-12-04T19:57:00.000000Z",
   "exercises": [
     {
-      "name": "Squats",
-      "sets": [
-        { "reps": 12, "weight": 100 },
-        { "reps": 10, "weight": 120 }
-      ],
-      "notes": "Deep squats"
+      "id": 1,
+      "name": "Sentadilla",
+      "muscle_group_id": 3,
+      "created_at": "2025-12-04T19:57:00.000000Z",
+      "updated_at": "2025-12-04T19:57:00.000000Z",
+      "pivot": {
+        "routine_id": 1,
+        "exercise_id": 1,
+        "sets": 3,
+        "reps": 10,
+        "created_at": "2025-12-04T19:57:00.000000Z",
+        "updated_at": "2025-12-04T19:57:00.000000Z"
+      }
     }
   ]
 }
 ```
 
+#### POST /api/routines
+
+Crea una nueva rutina con ejercicios asociados.
+
+**Request body:**
+```json
+{
+  "name": "Leg Day",
+  "exercises": [
+    {
+      "exercise_id": 1,
+      "sets": 4,
+      "reps": 12
+    }
+  ]
+}
+```
+
+> **Nota:** `sets` y `reps` son opcionales. Si no se proporcionan, se usan valores por defecto (4 sets, 8 reps).
+
 **Response:**
 ```json
 {
-  "id": "456",
+  "id": 2,
   "name": "Leg Day",
-  "description": "Legs workout",
+  "created_at": "2025-12-05T10:30:00.000000Z",
+  "updated_at": "2025-12-05T10:30:00.000000Z",
   "exercises": [
     {
-      "id": "e2",
-      "name": "Squats",
-      "sets": [
-        { "reps": 12, "weight": 100 },
-        { "reps": 10, "weight": 120 }
-      ],
-      "notes": "Deep squats"
+      "id": 1,
+      "name": "Sentadilla",
+      "muscle_group_id": 3,
+      "created_at": "2025-12-04T19:57:00.000000Z",
+      "updated_at": "2025-12-04T19:57:00.000000Z",
+      "pivot": {
+        "routine_id": 2,
+        "exercise_id": 1,
+        "sets": 4,
+        "reps": 12,
+        "created_at": "2025-12-05T10:30:00.000000Z",
+        "updated_at": "2025-12-05T10:30:00.000000Z"
+      }
     }
-  ],
-  "userId": "user123",
-  "createdAt": "2024-01-16T10:30:00Z",
-  "updatedAt": "2024-01-16T10:30:00Z"
+  ]
 }
 ```
 
 #### PUT /api/routines/:id
 
+Actualiza una rutina existente. Todos los campos son opcionales.
+
 **Request body:**
 ```json
 {
   "name": "Updated Leg Day",
-  "description": "Updated description",
-  "exercises": [...]
+  "exercises": [
+    {
+      "exercise_id": 1,
+      "sets": 5,
+      "reps": 10
+    }
+  ]
 }
 ```
+
+> **Nota:** Si se proporciona `exercises`, se reemplazarán todos los ejercicios actuales por los nuevos.
 
 **Response:**
 ```json
 {
-  "id": "456",
+  "id": 2,
   "name": "Updated Leg Day",
-  "description": "Updated description",
-  "exercises": [...],
-  "userId": "user123",
-  "createdAt": "2024-01-16T10:30:00Z",
-  "updatedAt": "2024-01-17T10:30:00Z"
+  "created_at": "2025-12-05T10:30:00.000000Z",
+  "updated_at": "2025-12-05T11:00:00.000000Z",
+  "exercises": [
+    {
+      "id": 1,
+      "name": "Sentadilla",
+      "muscle_group_id": 3,
+      "created_at": "2025-12-04T19:57:00.000000Z",
+      "updated_at": "2025-12-04T19:57:00.000000Z",
+      "pivot": {
+        "routine_id": 2,
+        "exercise_id": 1,
+        "sets": 5,
+        "reps": 10,
+        "created_at": "2025-12-05T10:30:00.000000Z",
+        "updated_at": "2025-12-05T11:00:00.000000Z"
+      }
+    }
+  ]
 }
 ```
 
 #### DELETE /api/routines/:id
+
+Elimina una rutina y desasocia todos sus ejercicios.
 
 **Response:** `204 No Content`
 

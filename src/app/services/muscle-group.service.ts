@@ -2,69 +2,69 @@ import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap, catchError, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Exercise } from '../models/exercise.model';
+import { MuscleGroup } from '../models/muscle-group.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ExerciseService {
-  private readonly apiUrl = `${environment.apiUrl}/exercises`;
+export class MuscleGroupService {
+  private readonly apiUrl = `${environment.apiUrl}/muscleGroups`;
 
-  private exercisesSignal = signal<Exercise[]>([]);
+  private muscleGroupsSignal = signal<MuscleGroup[]>([]);
   private loadingSignal = signal<boolean>(false);
   private errorSignal = signal<string | null>(null);
 
-  readonly exercises = this.exercisesSignal.asReadonly();
+  readonly muscleGroups = this.muscleGroupsSignal.asReadonly();
   readonly loading = this.loadingSignal.asReadonly();
   readonly error = this.errorSignal.asReadonly();
-  readonly exerciseCount = computed(() => this.exercisesSignal().length);
+  readonly muscleGroupCount = computed(() => this.muscleGroupsSignal().length);
 
   constructor(private http: HttpClient) {}
 
   /**
-   * Fetches all exercises from the catalog
+   * Fetches all muscle groups from the catalog
    */
-  getExercises(): Observable<Exercise[]> {
+  getMuscleGroups(): Observable<MuscleGroup[]> {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
 
-    return this.http.get<Exercise[]>(this.apiUrl).pipe(
-      tap((exercises) => {
-        this.exercisesSignal.set(exercises);
+    return this.http.get<MuscleGroup[]>(this.apiUrl).pipe(
+      tap((muscleGroups) => {
+        this.muscleGroupsSignal.set(muscleGroups);
         this.loadingSignal.set(false);
       }),
       catchError((error) => {
         this.loadingSignal.set(false);
-        this.errorSignal.set(error.message || 'Error loading exercises');
+        this.errorSignal.set(error.message || 'Error loading muscle groups');
         return throwError(() => error);
       })
     );
   }
 
   /**
-   * Fetches a single exercise by ID
+   * Fetches a single muscle group by ID
    */
-  getExercise(id: number): Observable<Exercise> {
+  getMuscleGroup(id: number): Observable<MuscleGroup> {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
 
-    return this.http.get<Exercise>(`${this.apiUrl}/${id}`).pipe(
+    return this.http.get<MuscleGroup>(`${this.apiUrl}/${id}`).pipe(
       tap(() => {
         this.loadingSignal.set(false);
       }),
       catchError((error) => {
         this.loadingSignal.set(false);
-        this.errorSignal.set(error.message || 'Error loading exercise');
+        this.errorSignal.set(error.message || 'Error loading muscle group');
         return throwError(() => error);
       })
     );
   }
 
   /**
-   * Clears all cached exercises
+   * Clears all cached muscle groups
    */
-  clearExercises(): void {
-    this.exercisesSignal.set([]);
+  clearMuscleGroups(): void {
+    this.muscleGroupsSignal.set([]);
     this.loadingSignal.set(false);
     this.errorSignal.set(null);
   }
