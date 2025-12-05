@@ -379,7 +379,6 @@ Crea una nueva rutina con ejercicios asociados.
 ```
 
 > **Nota:** `sets` y `reps` son opcionales. Si no se proporcionan, se usan valores por defecto (4 sets, 8 reps).
-```
 
 **Response:**
 ```json
@@ -427,7 +426,6 @@ Actualiza una rutina existente. Todos los campos son opcionales.
 ```
 
 > **Nota:** Si se proporciona `exercises`, se reemplazarán todos los ejercicios actuales por los nuevos.
-```
 
 **Response:**
 ```json
