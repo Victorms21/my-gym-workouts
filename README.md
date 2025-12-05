@@ -87,13 +87,22 @@ La aplicación consume los siguientes endpoints del backend Laravel:
 
 ### Autenticación
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| POST | `/api/login` | Iniciar sesión |
-| POST | `/api/register` | Registrar usuario |
-| GET | `/api/user` | Obtener usuario actual |
+El sistema utiliza autenticación basada en Bearer Token. Los endpoints `/api/login` y `/api/register` devuelven un token que debe incluirse en la cabecera `Authorization` de todas las peticiones a endpoints protegidos.
+
+**Cabecera de autorización:**
+```
+Authorization: Bearer <token>
+```
+
+| Método | Endpoint | Descripción | Autenticación |
+|--------|----------|-------------|---------------|
+| POST | `/api/login` | Iniciar sesión | No requerida |
+| POST | `/api/register` | Registrar usuario | No requerida |
+| GET | `/api/user` | Obtener usuario actual | Bearer Token |
 
 #### POST /api/login
+
+Inicia sesión y devuelve un Bearer token para autenticación.
 
 **Request body:**
 ```json
@@ -111,19 +120,20 @@ La aplicación consume los siguientes endpoints del backend Laravel:
     "email": "usuario@email.com",
     "name": "Nombre Usuario"
   },
-  "token": "sanctum_token_here"
+  "token": "bearer_token_here"
 }
 ```
 
 #### POST /api/register
+
+Registra un nuevo usuario y devuelve un Bearer token para autenticación.
 
 **Request body:**
 ```json
 {
   "name": "Nombre Usuario",
   "email": "usuario@email.com",
-  "password": "contraseña",
-  "password_confirmation": "contraseña"
+  "password": "contraseña"
 }
 ```
 
@@ -135,11 +145,18 @@ La aplicación consume los siguientes endpoints del backend Laravel:
     "email": "usuario@email.com",
     "name": "Nombre Usuario"
   },
-  "token": "sanctum_token_here"
+  "token": "bearer_token_here"
 }
 ```
 
 #### GET /api/user
+
+Obtiene la información del usuario autenticado. Requiere Bearer token en la cabecera.
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
 **Response:**
 ```json
@@ -152,12 +169,19 @@ La aplicación consume los siguientes endpoints del backend Laravel:
 
 ### Ejercicios
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | `/api/exercises` | Obtener todos los ejercicios |
-| GET | `/api/exercises/:id` | Obtener un ejercicio específico |
+Todos los endpoints de ejercicios requieren autenticación con Bearer token.
+
+| Método | Endpoint | Descripción | Autenticación |
+|--------|----------|-------------|---------------|
+| GET | `/api/exercises` | Obtener todos los ejercicios | Bearer Token |
+| GET | `/api/exercises/:id` | Obtener un ejercicio específico | Bearer Token |
 
 #### GET /api/exercises
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
 **Response:**
 ```json
@@ -189,15 +213,22 @@ La aplicación consume los siguientes endpoints del backend Laravel:
 
 ### Rutinas
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | `/api/routines` | Obtener todas las rutinas del usuario |
-| GET | `/api/routines/:id` | Obtener una rutina específica |
-| POST | `/api/routines` | Crear una nueva rutina |
-| PUT | `/api/routines/:id` | Actualizar una rutina existente |
-| DELETE | `/api/routines/:id` | Eliminar una rutina |
+Todos los endpoints de rutinas requieren autenticación con Bearer token.
+
+| Método | Endpoint | Descripción | Autenticación |
+|--------|----------|-------------|---------------|
+| GET | `/api/routines` | Obtener todas las rutinas del usuario | Bearer Token |
+| GET | `/api/routines/:id` | Obtener una rutina específica | Bearer Token |
+| POST | `/api/routines` | Crear una nueva rutina | Bearer Token |
+| PUT | `/api/routines/:id` | Actualizar una rutina existente | Bearer Token |
+| DELETE | `/api/routines/:id` | Eliminar una rutina | Bearer Token |
 
 #### GET /api/routines
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
 **Response:**
 ```json
