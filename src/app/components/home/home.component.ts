@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 
@@ -10,9 +10,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
+  public readonly authService = inject(AuthService);
   activeNavItem = signal<string>('routines');
-
-  constructor(public authService: AuthService) {}
 
   setActiveNavItem(item: string): void {
     this.activeNavItem.set(item);
