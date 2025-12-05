@@ -36,11 +36,12 @@ export interface Routine {
 
 /**
  * Exercise input for creating or updating routines
+ * sets and reps are optional - defaults to 4 sets and 8 reps if not provided
  */
 export interface RoutineExerciseInput {
   exercise_id: number;
-  sets: number;
-  reps: number;
+  sets?: number;
+  reps?: number;
 }
 
 /**

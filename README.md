@@ -362,6 +362,8 @@ Authorization: Bearer <token>
 
 #### POST /api/routines
 
+Crea una nueva rutina con ejercicios asociados.
+
 **Request body:**
 ```json
 {
@@ -374,6 +376,9 @@ Authorization: Bearer <token>
     }
   ]
 }
+```
+
+> **Nota:** `sets` y `reps` son opcionales. Si no se proporcionan, se usan valores por defecto (4 sets, 8 reps).
 ```
 
 **Response:**
@@ -405,6 +410,8 @@ Authorization: Bearer <token>
 
 #### PUT /api/routines/:id
 
+Actualiza una rutina existente. Todos los campos son opcionales.
+
 **Request body:**
 ```json
 {
@@ -417,6 +424,9 @@ Authorization: Bearer <token>
     }
   ]
 }
+```
+
+> **Nota:** Si se proporciona `exercises`, se reemplazarán todos los ejercicios actuales por los nuevos.
 ```
 
 **Response:**
@@ -447,6 +457,8 @@ Authorization: Bearer <token>
 ```
 
 #### DELETE /api/routines/:id
+
+Elimina una rutina y desasocia todos sus ejercicios.
 
 **Response:** `204 No Content`
 
