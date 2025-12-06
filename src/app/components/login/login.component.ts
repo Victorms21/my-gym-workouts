@@ -28,25 +28,28 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
-    if (this.loginForm.valid && !this.isLoading()) {
-      this.isLoading.set(true);
-      this.errorMessage.set(null);
-
-      const { email, password } = this.loginForm.value;
-
-      this.authService.login({ email, password }).subscribe({
-        next: () => {
-          this.isLoading.set(false);
-          this.router.navigate(['/home']);
-        },
-        error: (error) => {
-          this.isLoading.set(false);
-          this.errorMessage.set(
-            error.error?.message || 'Error al iniciar sesión. Por favor, inténtelo de nuevo.'
-          );
-        }
-      });
+    // Prevent duplicate submissions
+    if (this.isLoading() || this.loginForm.invalid) {
+      return;
     }
+
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+
+    const { email, password } = this.loginForm.value;
+
+    this.authService.login({ email, password }).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.router.navigate(['/home']);
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        this.errorMessage.set(
+          error.error?.message || 'Error al iniciar sesión. Por favor, inténtelo de nuevo.'
+        );
+      }
+    });
   }
 
   get emailControl() {
