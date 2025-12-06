@@ -28,23 +28,32 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
+    console.log('Login form submitted', { valid: this.loginForm.valid, value: this.loginForm.value });
     if (this.loginForm.valid) {
       this.isLoading.set(true);
       this.errorMessage.set(null);
 
       const { email, password } = this.loginForm.value;
+      console.log('Calling authService.login');
 
       this.authService.login({ email, password }).subscribe({
-        next: () => {
+        next: (response) => {
+          console.log('Login successful', response);
           this.isLoading.set(false);
           this.router.navigate(['/home']);
         },
         error: (error) => {
+          console.error('Login failed', error);
           this.isLoading.set(false);
           this.errorMessage.set(
             error.error?.message || 'Error al iniciar sesión. Por favor, inténtelo de nuevo.'
           );
         }
+      });
+    } else {
+      console.log('Form is invalid', this.loginForm.errors, {
+        email: this.emailControl?.errors,
+        password: this.passwordControl?.errors
       });
     }
   }

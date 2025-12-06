@@ -36,7 +36,7 @@ describe('authInterceptor', () => {
     // Set a token in localStorage to simulate having an old/invalid token
     localStorage.setItem('auth_token', 'old-invalid-token');
 
-    httpClient.get('http://localhost:3000/api/login').subscribe();
+    httpClient.post('http://localhost:3000/api/login', {}).subscribe();
 
     const req = httpMock.expectOne('http://localhost:3000/api/login');
     expect(req.request.headers.has('Authorization')).toBeFalse();

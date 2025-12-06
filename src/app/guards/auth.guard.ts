@@ -22,10 +22,19 @@ export const publicGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (!authService.isAuthenticated()) {
+  const isAuth = authService.isAuthenticated();
+  console.log('Public guard: checking authentication', {
+    isAuthenticated: isAuth,
+    hasToken: !!authService.getToken(),
+    hasUser: !!authService.currentUser()
+  });
+
+  if (!isAuth) {
+    console.log('Public guard: User is not authenticated, allowing access to public route');
     return true;
   }
 
+  console.log('Public guard: User is authenticated, redirecting to home');
   router.navigate(['/home']);
   return false;
 };
