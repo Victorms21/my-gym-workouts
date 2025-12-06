@@ -13,6 +13,11 @@ export const routes: Routes = [
     canActivate: [publicGuard]
   },
   {
+    path: 'register',
+    loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent),
+    canActivate: [publicGuard]
+  },
+  {
     path: 'home',
     loadComponent: () => import('./components/home/home.component').then(m => m.HomeComponent),
     canActivate: [authGuard]

@@ -5,14 +5,14 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.scss'
 })
-export class LoginComponent {
-  loginForm: FormGroup;
+export class RegisterComponent {
+  registerForm: FormGroup;
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
 
@@ -21,20 +21,21 @@ export class LoginComponent {
     private authService: AuthService,
     private router: Router
   ) {
-    this.loginForm = this.fb.group({
+    this.registerForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
   onSubmit(): void {
-    if (this.loginForm.valid) {
+    if (this.registerForm.valid) {
       this.isLoading.set(true);
       this.errorMessage.set(null);
 
-      const { email, password } = this.loginForm.value;
+      const { name, email, password } = this.registerForm.value;
 
-      this.authService.login({ email, password }).subscribe({
+      this.authService.register({ name, email, password }).subscribe({
         next: () => {
           this.isLoading.set(false);
           this.router.navigate(['/home']);
@@ -42,18 +43,22 @@ export class LoginComponent {
         error: (error) => {
           this.isLoading.set(false);
           this.errorMessage.set(
-            error.error?.message || 'Error al iniciar sesión. Por favor, inténtelo de nuevo.'
+            error.error?.message || 'Error al registrarse. Por favor, inténtelo de nuevo.'
           );
         }
       });
     }
   }
 
+  get nameControl() {
+    return this.registerForm.get('name');
+  }
+
   get emailControl() {
-    return this.loginForm.get('email');
+    return this.registerForm.get('email');
   }
 
   get passwordControl() {
-    return this.loginForm.get('password');
+    return this.registerForm.get('password');
   }
 }
