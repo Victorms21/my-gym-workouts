@@ -44,7 +44,7 @@ export class RoutinesComponent implements OnInit {
     return routine.exercises?.reduce((sum, ex) => sum + (ex.pivot?.sets || 0), 0) || 0;
   }
 
-  getUniqueMusleGroups(routine: Routine): number {
+  getUniqueMuscleGroups(routine: Routine): number {
     const muscleGroups = new Set(routine.exercises?.map(ex => ex.muscle_group_id) || []);
     return muscleGroups.size;
   }
