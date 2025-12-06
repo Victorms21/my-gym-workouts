@@ -8,10 +8,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = authService.getToken();
 
   // Skip adding Authorization header for authentication endpoints
-  // Extract pathname from URL to handle query params and trailing slashes
-  const url = new URL(req.url, 'http://localhost'); // Use dummy base for relative URLs
-  const pathname = url.pathname;
-  const isAuthEndpoint = pathname.endsWith('/login') || pathname.endsWith('/register');
+  // Check if URL contains the auth endpoints (login or register)
+  const isAuthEndpoint = req.url.includes('/api/login') || req.url.includes('/api/register');
 
   if (token && !isAuthEndpoint) {
     req = req.clone({
