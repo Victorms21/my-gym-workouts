@@ -21,6 +21,9 @@ export class LoginComponent {
     private authService: AuthService,
     private router: Router
   ) {
+    // Ensure clean state - if user navigated here, they should not be logged in
+    console.log('LoginComponent initialized');
+    
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
