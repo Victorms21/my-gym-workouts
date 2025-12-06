@@ -29,9 +29,14 @@ export class RoutinesComponent implements OnInit {
         this.loading.set(false);
       },
       error: (err) => {
-        this.error.set('Error al cargar las rutinas');
+        if (err.status === 401) {
+          this.error.set('Sesión expirada. Por favor, inicia sesión nuevamente.');
+          console.error('Error loading routines: 401 Unauthorized - Token invalid or expired');
+        } else {
+          this.error.set('Error al cargar las rutinas');
+          console.error('Error loading routines:', err);
+        }
         this.loading.set(false);
-        console.error('Error loading routines:', err);
       }
     });
   }

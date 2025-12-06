@@ -1,8 +1,8 @@
-<div class="login-container">
-  <div class="login-card">
-    <div class="login-header">
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
       <h1>My Gym Workouts</h1>
-      <p>Inicia sesión para continuar</p>
+      <p>Crea tu cuenta para comenzar</p>
     </div>
 
     @if (errorMessage()) {
@@ -11,7 +11,27 @@
       </div>
     }
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">Nombre</label>
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          placeholder="Tu nombre"
+          [class.invalid]="nameControl?.invalid && nameControl?.touched"
+        />
+        @if (nameControl?.invalid && nameControl?.touched) {
+          <span class="error-text">
+            @if (nameControl?.errors?.['required']) {
+              El nombre es requerido
+            } @else if (nameControl?.errors?.['minlength']) {
+              El nombre debe tener al menos 2 caracteres
+            }
+          </span>
+        }
+      </div>
+
       <div class="form-group">
         <label for="email">Correo electrónico</label>
         <input
@@ -54,20 +74,20 @@
 
       <button
         type="submit"
-        class="login-button"
-        [disabled]="loginForm.invalid || isLoading()"
+        class="register-button"
+        [disabled]="registerForm.invalid || isLoading()"
       >
         @if (isLoading()) {
           <span class="spinner"></span>
-          Iniciando sesión...
+          Registrando...
         } @else {
-          Iniciar sesión
+          Crear cuenta
         }
       </button>
     </form>
 
-    <div class="register-link">
-      <p>¿No tienes una cuenta? <a routerLink="/register">Regístrate</a></p>
+    <div class="login-link">
+      <p>¿Ya tienes una cuenta? <a routerLink="/login">Inicia sesión</a></p>
     </div>
   </div>
 </div>
