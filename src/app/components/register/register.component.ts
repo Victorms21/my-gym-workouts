@@ -29,7 +29,7 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
-    if (this.registerForm.valid) {
+    if (this.registerForm.valid && !this.isLoading()) {
       this.isLoading.set(true);
       this.errorMessage.set(null);
 
