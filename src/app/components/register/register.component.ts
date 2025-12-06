@@ -29,25 +29,28 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
-    if (this.registerForm.valid && !this.isLoading()) {
-      this.isLoading.set(true);
-      this.errorMessage.set(null);
-
-      const { name, email, password } = this.registerForm.value;
-
-      this.authService.register({ name, email, password }).subscribe({
-        next: () => {
-          this.isLoading.set(false);
-          this.router.navigate(['/home']);
-        },
-        error: (error) => {
-          this.isLoading.set(false);
-          this.errorMessage.set(
-            error.error?.message || 'Error al registrarse. Por favor, inténtelo de nuevo.'
-          );
-        }
-      });
+    // Prevent duplicate submissions
+    if (this.isLoading() || this.registerForm.invalid) {
+      return;
     }
+
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+
+    const { name, email, password } = this.registerForm.value;
+
+    this.authService.register({ name, email, password }).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.router.navigate(['/home']);
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        this.errorMessage.set(
+          error.error?.message || 'Error al registrarse. Por favor, inténtelo de nuevo.'
+        );
+      }
+    });
   }
 
   get nameControl() {
