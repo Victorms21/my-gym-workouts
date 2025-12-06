@@ -18,13 +18,8 @@ export interface RegisterRequest {
 }
 
 export interface AuthResponse {
-  data: User;
-  access_token: string;
-  token_type: string;
-}
-
-// Legacy support - can be removed later
-export interface LegacyAuthResponse {
   user: User;
-  token: string;
+  accessToken: string;
+  token_type: string;
+  message?: string;
 }

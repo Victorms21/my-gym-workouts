@@ -45,8 +45,8 @@ describe('AuthService', () => {
   it('should login successfully', () => {
     const credentials: LoginRequest = { email: 'test@test.com', password: 'password123' };
     const mockResponse: AuthResponse = {
-      data: { id: 1, email: 'test@test.com', name: 'Test User' },
-      access_token: 'mock-jwt-token',
+      user: { id: 1, email: 'test@test.com', name: 'Test User' },
+      accessToken: 'mock-jwt-token',
       token_type: 'Bearer'
     };
 
@@ -69,8 +69,8 @@ describe('AuthService', () => {
       password: 'password123'
     };
     const mockResponse: AuthResponse = {
-      data: { id: 2, email: 'newuser@test.com', name: 'New User' },
-      access_token: 'new-jwt-token',
+      user: { id: 2, email: 'newuser@test.com', name: 'New User' },
+      accessToken: 'new-jwt-token',
       token_type: 'Bearer'
     };
 

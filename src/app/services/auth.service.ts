@@ -27,9 +27,9 @@ export class AuthService {
   login(credentials: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
       tap(response => {
-        this.setToken(response.access_token);
-        this.setUser(response.data);
-        this.currentUserSignal.set(response.data);
+        this.setToken(response.accessToken);
+        this.setUser(response.user);
+        this.currentUserSignal.set(response.user);
       }),
       catchError(error => {
         console.error('Login error:', error);
@@ -41,9 +41,9 @@ export class AuthService {
   register(data: RegisterRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, data).pipe(
       tap(response => {
-        this.setToken(response.access_token);
-        this.setUser(response.data);
-        this.currentUserSignal.set(response.data);
+        this.setToken(response.accessToken);
+        this.setUser(response.user);
+        this.currentUserSignal.set(response.user);
       }),
       catchError(error => {
         console.error('Register error:', error);
